@@ -1,7 +1,10 @@
 const API_KEY = '0a951f7339926b0d5f3b76d7e60a7dc0'
 const API_LANGUAGE = 'pt-br'
 const LIST_MOVIES = ['tt12801262', 'tt7146812', 'tt5109280', 'tt3521164', 'tt2380307', 'tt2948372', 'tt8097030']
-const BASE_URL_IMAGE = 'http://image.tmdb.org/t/p/original'
+const BASE_URL_IMAGE = {
+    original: 'http://image.tmdb.org/t/p/original',
+    small: 'http://image.tmdb.org/t/p/w500'
+}
 
 const moviesList = document.getElementById('movies_list')
 
@@ -12,20 +15,21 @@ function getUrlMovie(movieId) {
 
 function setMainMovie(movieId) {
     fetch(getUrlMovie(movieId)).then(response => response.json()).then(data => {
-        const title = document.querySelector('.movie h1')
-        const description = document.querySelector('.movie p')
+        const title = document.querySelector('.movie_feature h1')
+        const description = document.querySelector('.movie_feature p')
         const rating = document.querySelector('.rating strong')
-        const info = document.querySelector('.movie span')
-        const app = document.getElementById('app')
+        const info = document.querySelector('.movie_feature span')
+        const appImage = document.querySelector('.app_image img')
     
         const yearRelease = data.release_date.split('-')[0]
-        const image = BASE_URL_IMAGE.concat(data.backdrop_path)
+        const image = BASE_URL_IMAGE.original.concat(data.backdrop_path)
     
         title.innerHTML = data.title
         description.innerHTML = data.overview
         rating.innerHTML = data.vote_average
         info.innerHTML = yearRelease + ' - ' + data.genres[2].name + ' - ' + 'Filme'
-        app.style.backgroundImage = `linear-gradient(rgba(13, 22, 46, 0.7) 23.21%, rgba(13, 22, 46, 0.0001) 96.69%), url('${image}')`
+        appImage.setAttribute('src', image)
+        //app.style.backgroundImage = `linear-gradient(rgba(13, 22, 46, 0.7) 23.21%, rgba(13, 22, 46, 0.0001) 96.69%), url('${image}')`
     })
 }
 
@@ -37,17 +41,32 @@ function createButtonMovie(movieId) {
     return button
 }
 
+function createImageMovie(movieImage, movieTitle) {
+    const divImageMovie = document.createElement('div')
+    divImageMovie.classList.add('movie_image')
+
+    const image = document.createElement('img')
+    image.setAttribute('src', movieImage)
+    image.setAttribute('alt', `Imagem do filme ${movieTitle}`)
+    image.setAttribute('loading', 'lazy')
+
+    divImageMovie.appendChild(image)
+
+    return divImageMovie
+}
+
 function createMovie(movieId) {
     fetch(getUrlMovie(movieId)).then(response => response.json()).then(data => {
         const movie = document.createElement('li')
+        movie.classList.add('movie')
+
         const genre = `<span>${data.genres[2].name}</span>`
         const title = `<strong>${data.title}</strong>`
-        const image = BASE_URL_IMAGE.concat(data.backdrop_path)
+        const image = BASE_URL_IMAGE.small.concat(data.backdrop_path)
 
         movie.innerHTML = genre + title
         movie.appendChild(createButtonMovie(movieId))
-
-        movie.style.backgroundImage = `linear-gradient(180deg, rgba(14, 23, 47, 0.0001) 11.72%, #0E172F 100%), url('${image}')`
+        movie.appendChild(createImageMovie(image, data.title))
 
         moviesList.appendChild(movie)
     })
