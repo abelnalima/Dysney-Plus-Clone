@@ -31,13 +31,13 @@
     line-height: 2rem;
     font-weight: 400;
     width: 100%;
-    max-width: 540px;
+    max-width: 800px;
 
-    overflow: hidden;
+    /* overflow: hidden;
     text-overflow: ellipsis;
     display: -webkit-box;
     -webkit-line-clamp: 4;
-    -webkit-box-orient: vertical;
+    -webkit-box-orient: vertical; */
 }
 
 .movie_feature button {

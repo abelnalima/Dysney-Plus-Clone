@@ -20,11 +20,18 @@
         <header>
             <img src="./images/logo.png" alt="">
 
-            <button type="button" class="button_menu">
+            <button type="button" class="button_menu" onclick="changeButtonMenu()">
                 <span></span>
                 <span></span>
                 <span></span>
             </button>
+
+            <nav class="navigation active">
+                <h2>Filmes</h2>
+
+                <ul id="movies">
+                </ul>
+            </nav>
         </header>
 
         <main>
@@ -44,17 +51,17 @@
                     <!-- Descrição do filme -->
                     <p></p>
 
-                    <button>
+                    <button type="button">
                         <img src="./images/icon-play.png" alt="Icon Play">
                         Assistir Agora
                     </button>
                 </section>
             </section>
 
-            <aside class="movies">
+            <!-- <aside class="movies">
                 <h2>Filmes</h2>
                 <ul id="movies_list"></ul>
-            </aside>
+            </aside> -->
             
         </main>
     </div>
