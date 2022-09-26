@@ -6,12 +6,19 @@ const BASE_URL_IMAGE = {
     small: 'http://image.tmdb.org/t/p/w500'
 }
 
-const moviesList = document.getElementById('movies_list')
+const moviesList = document.getElementById('movies')
 
 function getUrlMovie(movieId) {
     return `https://api.themoviedb.org/3/movie/${movieId}?api_key=${API_KEY}&language=${API_LANGUAGE}`
 }
 
+function changeButtonMenu() {
+    const button = document.querySelector('.button_menu')
+    const navigation = document.querySelector('.navigation')
+
+    button.classList.toggle('active')
+    navigation.classList.toggle('active')
+}
 
 function setMainMovie(movieId) {
     fetch(getUrlMovie(movieId)).then(response => response.json()).then(data => {
@@ -29,6 +36,8 @@ function setMainMovie(movieId) {
         rating.innerHTML = data.vote_average
         info.innerHTML = yearRelease + ' - ' + data.genres[2].name + ' - ' + 'Filme'
         appImage.setAttribute('src', image)
+
+        changeButtonMenu()
         //app.style.backgroundImage = `linear-gradient(rgba(13, 22, 46, 0.7) 23.21%, rgba(13, 22, 46, 0.0001) 96.69%), url('${image}')`
     })
 }
@@ -75,6 +84,8 @@ function createMovie(movieId) {
 function loadListMovies() {
     LIST_MOVIES.map(createMovie)
 }
+
+
 
 loadListMovies()
 setMainMovie(LIST_MOVIES[0])

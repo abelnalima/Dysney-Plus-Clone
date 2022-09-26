@@ -1,16 +1,16 @@
-.movies {
+/* .movies {
     display: flex;
     flex-direction: column;
     row-gap: 24px;
-}
+} */
 
-.movies h2 {
+/* .movies h2 {
     font-size: 1.75rem;
     line-height: 2.125rem;
     font-weight: 700;
-}
+} */
 
-.movies ul {
+/* .movies ul {
     height: 640px;
     overflow: auto;
     padding-right: 44px;
@@ -28,6 +28,15 @@ ul::-webkit-scrollbar-track {
 ul::-webkit-scrollbar-thumb {
     background: var(--primary);
     border-radius: 0.375rem;
+} */
+
+#movies {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px 16px;
+    margin-top: 48px;
+
+    list-style: none;
 }
 
 .movie {
@@ -42,12 +51,13 @@ ul::-webkit-scrollbar-thumb {
     padding-left: 10px;
     border-radius: 8px;
     overflow: hidden;
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
     background-image: linear-gradient(rgba(14, 23, 47, 0) 11.72%, rgb(14, 23, 47) 100%)
 }
 
-.movie:not(:first-child) {
+/* .movie:not(:first-child) {
     margin-top: 30px;
-}
+} */
 
 .movie span {
     font-size: 0.875rem;
