@@ -6,6 +6,7 @@ const BASE_URL_IMAGE = {
 }
 
 const movies = []
+let movieActive = ''
 const moviesElement = document.getElementById('movies')
 
 function getUrlMovie(movieId) {
@@ -34,7 +35,19 @@ function setMainMovie(movie) {
     appImage.setAttribute('src', movie.image.original)
 }
 
+function changeMovieActiveInList(newMovieActive) {
+    const movieActiveCurrent = document.getElementById(movieActive)
+    movieActiveCurrent.classList.remove('active-movie')
+    
+    const movieActiveNew = document.getElementById(newMovieActive)
+    movieActiveNew.classList.add('active-movie')
+
+    movieActive = newMovieActive
+}
+
 function changeMainMovie(movieId) {
+    changeMovieActiveInList(movieId)
+
     const movie = movies.find(movie => movie.id === movieId)
 
     setMainMovie(movie)
@@ -67,6 +80,7 @@ function createImageMovie(movieImage, movieTitle) {
 function addMovieInList(movie) {
     const movieElement = document.createElement('li')
     movieElement.classList.add('movie')
+    movieElement.setAttribute('id', movie.id)
 
     const genre = `<span>${movie.genre}</span>`
     const title = `<strong>${movie.title}</strong>`
@@ -98,12 +112,16 @@ function loadMovies() {
 
             movies.push(movieData)
 
+            addMovieInList(movieData)
+
             if (index === 0) {
                 setMainMovie(movieData)
+
+                movieActive = movieData.id
+
+                const movieActiveNew = document.getElementById(movieData.id)
+                movieActiveNew.classList.add('active-movie')  
             }
-            
-            addMovieInList(movieData)
-            
         })
     })
 }
