@@ -50,9 +50,10 @@ function changeMainMovie(movieId) {
 
     const movie = movies.find(movie => movie.id === movieId)
 
-    setMainMovie(movie)
-    changeButtonMenu()        
-
+    if (movie?.id) {
+        setMainMovie(movie)
+        changeButtonMenu() 
+    }
 }
 
 function createButtonMovie(movieId) {
@@ -92,13 +93,16 @@ function addMovieInList(movie) {
     moviesElement.appendChild(movieElement)     
 }
 
-function loadMovies() {
-    const LIST_MOVIES = ['tt12801262', 'tt7146812', 'tt5109280', 'tt3521164', 'tt2380307', 'tt2948372', 'tt8097030'] 
+async function getMovieData(movieId) {
+    const isMovieInList = movies.findIndex(movie => movie.id === movieId)
+
+    if (isMovieInList === -1) {
+        try {
+            let data = await fetch(getUrlMovie(movieId))
+            data = await data.json()
     
-    LIST_MOVIES.map((movie, index) => {
-        fetch(getUrlMovie(movie)).then(response => response.json()).then(data => {
             const movieData = {
-                id: movie,
+                id: movieId,
                 title: data.title,
                 overview: data.overview,
                 vote_average: data.vote_average,
@@ -108,22 +112,61 @@ function loadMovies() {
                     original: BASE_URL_IMAGE.original.concat(data.backdrop_path),
                     small: BASE_URL_IMAGE.small.concat(data.backdrop_path)
                 }
-            }    
-
+        }
+    
             movies.push(movieData)
+    
+            return movieData
+    
+        } catch (error) {
+            console.log('mensagen de erro:', error.message)
+        }
+    }
 
-            addMovieInList(movieData)
+    return null
+}
 
-            if (index === 0) {
-                setMainMovie(movieData)
+function loadMovies() {
+    const LIST_MOVIES = ['tt12801262', 'tt7146812', 'tt5109280', 'tt3521164', 'tt2380307', 'tt2948372', 'tt8097030'] 
+    
+    LIST_MOVIES.map(async (movie, index) => {
+        const movieData = await getMovieData(movie)
 
-                movieActive = movieData.id
+        addMovieInList(movieData)
 
-                const movieActiveNew = document.getElementById(movieData.id)
-                movieActiveNew.classList.add('active-movie')  
-            }
-        })
+        if (index === 0) {
+            setMainMovie(movieData)
+            movieActive = movieData.id
+
+            const movieActiveNew = document.getElementById(movieData.id)
+            movieActiveNew.classList.add('active-movie')  
+        }   
     })
 }
+
+const buttonAddMovie = document.getElementById('addMovie')
+
+function formattedMovieId(movieID) {
+    if (movieID.includes('https://www.imdb.com/title/')) {
+        const id = movieID.split('/')[4]
+
+        return id
+    }
+
+    return movieID
+}
+
+buttonAddMovie.addEventListener('submit', async function(event) {
+    event.preventDefault()
+
+    const newMovieId = formattedMovieId(event.target['movie'].value)
+    const newMovie = await getMovieData(newMovieId)
+
+    if (newMovie?.id) {
+        addMovieInList(newMovie)
+    }
+
+    event.target['movie'].value = ''
+})
 
 loadMovies()
