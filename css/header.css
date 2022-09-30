@@ -41,3 +41,9 @@ header {
 .button_menu.active span:nth-child(1) {
     transform: rotate(-45deg) translateY(18px);
 }
+
+@media(max-width: 768px) {
+    header {
+        margin-bottom: 0;
+    }
+}
